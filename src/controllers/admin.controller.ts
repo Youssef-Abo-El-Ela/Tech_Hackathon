@@ -60,5 +60,17 @@ export const createAdmin = async (req: Request, res: Response) => {
     }
 }
 
-
+export const createBeneficiary = async (req: Request, res: Response) => {
+    const { name, email, national_id, phone_number } = req.body;
+    try {
+        const beneficiary_id = await adminService.createBeneficiary(name, national_id, phone_number, email);
+        res.status(200).json({ message: "Beneficiary created successfully", beneficiary_id });
+    } catch (error) {
+        if (error instanceof ErrorGenerator) {
+            res.status(error.statusCode).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: (error as Error).message });
+        }
+    }
+}
 

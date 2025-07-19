@@ -1,6 +1,7 @@
 import { prisma } from "../app";
 import { comparePassword, hashPassword } from "../utils/hash";
 import { ErrorGenerator } from "../utils/errorGenerator";
+import { customAlphabet } from "nanoid";
 
 export const loginAdmin = async (email: string, password: string) => {
     const admin = await prisma.admins.findUnique({
@@ -55,4 +56,21 @@ export const createAdmin = async (email: string, password: string, username: str
 
     return admin;
 
+}
+
+export const createBeneficiary = async (name: string, national_id: string, phone_number: string, email?: string) => {
+    let data: any;
+    const customAlphabet_ = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    const beneficiary_id = customAlphabet(customAlphabet_, 10)();
+
+    if (!email) {
+        data = { name, national_id, phone_number, beneficiary_id }
+    } else {
+        data = { name, email, national_id, phone_number, beneficiary_id }
+    }
+
+    const beneficiary = await prisma.beneficiaries.create({
+        data
+    });
+    return beneficiary.beneficiary_id;
 }

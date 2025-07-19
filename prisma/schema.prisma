@@ -29,15 +29,15 @@ model admins {
 model beneficiaries {
   id                  String   @id @default(uuid())
   name                String
-  email               String   @unique
+  email               String?   @unique
   national_id         String   @unique
   phone_number        String   @unique
   role                String   @default("beneficiary")
-  longitude           Float
-  latitude            Float
-  location_updated_at DateTime
+  longitude           Float?
+  latitude            Float?
+  location_updated_at DateTime?
   alert_status        Boolean  @default(false)
-  alert_time          DateTime
+  alert_time          DateTime?
   beneficiary_id      String   @unique
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
