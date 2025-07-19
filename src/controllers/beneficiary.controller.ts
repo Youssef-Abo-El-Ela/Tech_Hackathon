@@ -24,4 +24,20 @@ export const loginBeneficiary = async (req: Request, res: Response) => {
             res.status(500).json({ message: (error as Error).message });
         }
     }
+}   
+
+export const updateLocation = async (req: Request, res: Response) => {
+    const beneficiary_id = req.user.id;
+    const { latitude, longitude, location_updated_at } = req.body;
+    try {
+        await beneficiaryService.updateLocation(latitude, longitude, location_updated_at , beneficiary_id);
+        res.status(200).json({ message: "Location updated successfully"});
+    } 
+    catch (error) {
+        if (error instanceof ErrorGenerator) {
+            res.status(error.statusCode).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: (error as Error).message });
+        }
+    }
 }

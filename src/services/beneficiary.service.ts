@@ -14,3 +14,17 @@ export const loginBeneficiary = async (beneficiary_id: string) => {
 
     return beneficiary;
 }
+
+export const updateLocation = async (latitude: number, longitude: number, location_updated_at: Date , beneficiary_id: string) => {
+
+    const beneficiary = await prisma.beneficiaries.update({
+        where: {
+            id: beneficiary_id,
+        },
+        data: { latitude, longitude, location_updated_at }
+    });
+
+    if (!beneficiary) {
+        throw new ErrorGenerator("Beneficiary not found", 404);
+    }
+}
