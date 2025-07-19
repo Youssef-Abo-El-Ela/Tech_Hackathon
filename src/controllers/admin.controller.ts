@@ -26,23 +26,39 @@ export const loginAdmin = async (req: Request, res: Response) => {
         if (error instanceof ErrorGenerator) {
             res.status(error.statusCode).json({ message: error.message });
         } else {
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: (error as Error).message });
         }
     }
 }
 
 export const getUsers = async (req: Request, res: Response) => {
     try {
-        const { limit = 10, page } = req.query;
+        const { limit = 10, page = 1 } = req.query;
         const users = await adminService.getUsers(Number(limit), Number(page));
         res.status(200).json({ users: users.users, total: users.total });
     } catch (error) {
         if (error instanceof ErrorGenerator) {
             res.status(error.statusCode).json({ message: error.message });
         } else {
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: (error as Error).message });
         }
     }
 }
+
+export const createAdmin = async (req: Request, res: Response) => {
+    const { email, password, username, national_id, phone_number } = req.body;
+    try {
+        const admin = await adminService.createAdmin(email, password, username, national_id, phone_number);
+        res.status(200).json({ message: "Admin created successfully", admin });
+    }
+    catch (error) {
+        if (error instanceof ErrorGenerator) {
+            res.status(error.statusCode).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: (error as Error).message });
+        }
+    }
+}
+
 
 

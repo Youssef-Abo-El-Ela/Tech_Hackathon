@@ -38,7 +38,21 @@ export const getUsers = async (limit: number, page: number) => {
         }
     });
 
+    if (!users) {
+        throw new ErrorGenerator("No users found", 404);
+    }
+
     const total = await prisma.beneficiaries.count();
 
     return { users, total };
+}
+
+export const createAdmin = async (email: string, password: string, username: string, national_id: string, phone_number: string) => {
+    const hashedPassword = await hashPassword(password);
+    const admin = await prisma.admins.create({
+        data: { email, password: hashedPassword, username, national_id, phone_number }
+    });
+
+    return admin;
+
 }

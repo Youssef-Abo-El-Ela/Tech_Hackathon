@@ -21,7 +21,7 @@ export const loginBeneficiary = async (req: Request, res: Response) => {
         if (error instanceof ErrorGenerator) {
             res.status(error.statusCode).json({ message: error.message });
         } else {
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: (error as Error).message });
         }
     }
 }
