@@ -41,3 +41,20 @@ export const updateLocation = async (req: Request, res: Response) => {
         }
     }
 }
+
+
+export const updateAlertStatus = async (req: Request, res: Response) => {
+    const beneficiary_id = req.user.id;
+    const { latitude, longitude, location_updated_at , alert_status, alert_time } = req.body;
+    try {
+        await beneficiaryService.updateAlertStatus(latitude, longitude, location_updated_at , alert_status, alert_time, beneficiary_id);
+        res.status(200).json({ message: "Alert status updated successfully"});
+    }
+    catch (error) {
+        if (error instanceof ErrorGenerator) {
+            res.status(error.statusCode).json({ message: error.message });
+        } else {
+            res.status(500).json({ message: (error as Error).message });
+        }
+    }
+}
