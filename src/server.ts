@@ -1,10 +1,12 @@
 import app from "./app";
 import { PORT } from "./config/env";
 import swaggerUi from 'swagger-ui-express';
-import YAML from 'yamljs';
 
-const swaggerDocument = YAML.load("./src/swagger.yaml");
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(undefined, {
+    swaggerOptions: {
+        url: "/swagger.yaml",
+    }
+}));
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
