@@ -17,7 +17,7 @@ export const loginBeneficiary = async (beneficiary_id: string) => {
 }
 
 export const updateLocation = async (latitude: number, longitude: number, location_updated_at: string, beneficiary_id: string) => {
-    console.log(location_updated_at);
+    
     const locationDate = new Date(location_updated_at);
     const beneficiary = await prisma.beneficiaries.update({
         where: {
@@ -32,11 +32,13 @@ export const updateLocation = async (latitude: number, longitude: number, locati
 }
 
 export const updateAlertStatus = async (latitude: number, longitude: number, location_updated_at: Date, alert_status: boolean, alert_time: Date, beneficiary_id: string) => {
+    const locationDate = new Date(location_updated_at);
+    const alertTime = new Date(alert_time);
     const beneficiary = await prisma.beneficiaries.update({
         where: {
             id: beneficiary_id,
         },
-        data: { latitude, longitude, location_updated_at, alert_status, alert_time }
+        data: { latitude, longitude, location_updated_at: locationDate, alert_status, alert_time: alertTime }
     });
 
     if (!beneficiary) {
@@ -45,7 +47,7 @@ export const updateAlertStatus = async (latitude: number, longitude: number, loc
 }
 
 // XOR-based decryption (matches your xorEncrypt logic)
-function xorDecrypt(encryptedBase64: string, key: string): string {
+function xorDecrypt(encryptedBase64: string, key: string = "testkey123"): string {
     // Decode from base64
     const encrypted = atob(encryptedBase64);
     let result = '';
