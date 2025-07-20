@@ -1,0 +1,307 @@
+openapi: 3.0.0
+info:
+  title: Tech Hackathon API
+  version: 1.0.0
+  description: API documentation for Tech Hackathon backend
+servers:
+  - url: http://localhost:3000
+paths:
+  /admin/login:
+    post:
+      summary: Admin login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  token:
+                    type: string
+        '4XX':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /admin/getUsers:
+    get:
+      summary: Get users (paginated)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      type: object
+                  total:
+                    type: integer
+        '4XX':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /admin/createAdmin:
+    post:
+      summary: Create a new admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                username:
+                  type: string
+                national_id:
+                  type: string
+                phone_number:
+                  type: string
+              required:
+                - email
+                - password
+                - username
+                - national_id
+                - phone_number
+      responses:
+        '200':
+          description: Admin created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  admin:
+                    type: object
+        '4XX':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /admin/createBeneficiary:
+    post:
+      summary: Create a new beneficiary
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                national_id:
+                  type: string
+                phone_number:
+                  type: string
+              required:
+                - name
+                - email
+                - national_id
+                - phone_number
+      responses:
+        '200':
+          description: Beneficiary created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  beneficiary_id:
+                    type: string
+        '4XX':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /beneficiary/login:
+    post:
+      summary: Beneficiary login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                beneficiary_id:
+                  type: string
+              required:
+                - beneficiary_id
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  token:
+                    type: string
+        '4XX':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /beneficiary/updateLocation:
+    put:
+      summary: Update beneficiary location
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+                location_updated_at:
+                  type: string
+              required:
+                - latitude
+                - longitude
+                - location_updated_at
+      responses:
+        '200':
+          description: Location updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '4XX':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /beneficiary/updateAlertStatus:
+    put:
+      summary: Update beneficiary alert status
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+                location_updated_at:
+                  type: string
+                alert_status:
+                  type: string
+                alert_time:
+                  type: string
+              required:
+                - latitude
+                - longitude
+                - location_updated_at
+                - alert_status
+                - alert_time
+      responses:
+        '200':
+          description: Alert status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '4XX':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
