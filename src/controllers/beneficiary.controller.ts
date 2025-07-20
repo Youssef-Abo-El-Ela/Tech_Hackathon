@@ -3,6 +3,7 @@ import { ErrorGenerator } from "../utils/errorGenerator";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env";
 import * as beneficiaryService from "../services/beneficiary.service";
+import { socketManager } from "../config/socket";
 
 export const loginBeneficiary = async (req: Request, res: Response) => {
     const { beneficiary_id } = req.body;
@@ -30,7 +31,16 @@ export const updateLocation = async (req: Request, res: Response) => {
     const beneficiary_id = req.user.id;
     const { latitude, longitude, location_updated_at } = req.body;
     try {
-        await beneficiaryService.updateLocation(latitude, longitude, location_updated_at , beneficiary_id);
+        const updatedBeneficiary = await beneficiaryService.updateLocation(latitude, longitude, location_updated_at , beneficiary_id);
+        
+        // Emit real-time update to admin
+        socketManager.emitLocationUpdate(beneficiary_id, {
+            latitude,
+            longitude,
+            location_updated_at,
+            beneficiary: updatedBeneficiary
+        });
+        
         res.status(200).json({ message: "Location updated successfully"});
     } 
     catch (error) {
@@ -47,7 +57,18 @@ export const updateAlertStatus = async (req: Request, res: Response) => {
     const beneficiary_id = req.user.id;
     const { latitude, longitude, location_updated_at , alert_status, alert_time } = req.body;
     try {
-        await beneficiaryService.updateAlertStatus(latitude, longitude, location_updated_at , alert_status, alert_time, beneficiary_id);
+        const updatedBeneficiary = await beneficiaryService.updateAlertStatus(latitude, longitude, location_updated_at , alert_status, alert_time, beneficiary_id);
+        
+        // Emit real-time update to admin
+        socketManager.emitAlertStatusUpdate(beneficiary_id, {
+            latitude,
+            longitude,
+            location_updated_at,
+            alert_status,
+            alert_time,
+            beneficiary: updatedBeneficiary
+        });
+        
         res.status(200).json({ message: "Alert status updated successfully"});
     }
     catch (error) {
