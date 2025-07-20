@@ -3,7 +3,7 @@ import { PORT } from "./config/env";
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 
-const swaggerDocument = YAML.load("./swagger.yaml");
+const swaggerDocument = YAML.load("./src/swagger.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(PORT, () => {
