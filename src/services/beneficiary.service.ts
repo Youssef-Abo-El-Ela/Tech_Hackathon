@@ -16,12 +16,12 @@ export const loginBeneficiary = async (beneficiary_id: string) => {
 }
 
 export const updateLocation = async (latitude: number, longitude: number, location_updated_at: string , beneficiary_id: string) => {
-
+    const locationDate = new Date(location_updated_at);
     const beneficiary = await prisma.beneficiaries.update({
         where: {
             id: beneficiary_id,
         },
-        data: { latitude, longitude, location_updated_at }
+        data: { latitude, longitude, location_updated_at: locationDate }
     });
 
     if (!beneficiary) {
