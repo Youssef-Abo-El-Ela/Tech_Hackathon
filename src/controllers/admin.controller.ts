@@ -3,7 +3,6 @@ import * as adminService from "../services/admin.service";
 import { ErrorGenerator } from "../utils/errorGenerator";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env";
-import { socketManager } from "../config/socket";
 
 export const loginAdmin = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -72,19 +71,6 @@ export const createBeneficiary = async (req: Request, res: Response) => {
         } else {
             res.status(500).json({ message: (error as Error).message });
         }
-    }
-}
-
-export const getSocketStatus = async (req: Request, res: Response) => {
-    try {
-        const adminCount = socketManager.getAdminCount();
-        res.status(200).json({ 
-            message: "Socket status retrieved successfully",
-            connectedAdmins: adminCount,
-            socketEnabled: true
-        });
-    } catch (error) {
-        res.status(500).json({ message: (error as Error).message });
     }
 }
 

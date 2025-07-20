@@ -27,8 +27,6 @@ export const updateLocation = async (latitude: number, longitude: number, locati
     if (!beneficiary) {
         throw new ErrorGenerator("Beneficiary not found", 404);
     }
-
-    return beneficiary;
 }
 
 export const updateAlertStatus = async (latitude: number, longitude: number, location_updated_at: Date, alert_status: boolean, alert_time: Date, beneficiary_id: string) => {
@@ -42,6 +40,4 @@ export const updateAlertStatus = async (latitude: number, longitude: number, loc
     if (!beneficiary) {
         throw new ErrorGenerator("Beneficiary not found", 404);
     }
-
-    return beneficiary;
 }
