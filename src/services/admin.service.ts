@@ -35,7 +35,10 @@ export const getUsers = async (limit: number, page: number) => {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: {
-            alert_time: "desc"
+            alert_time: {
+                sort: "desc",
+                nulls: "last"
+            }
         }
     });
 
